@@ -368,18 +368,13 @@ function route() {
   renderLogin();
 }
 
-fetch("./test-data.json")
-  .then((response) => {
-    if (!response.ok) throw new Error("Unable to load test data.");
-    return response.json();
-  })
-  .then((data) => {
-    state.data = data;
-    route();
-  })
-  .catch((error) => {
-    app.innerHTML = `<main class="staticError"><h1>Unable to open the demonstration</h1><p>${error.message}</p></main>`;
-  });
+if (window.TAM_TEST_DATA) {
+  state.data = window.TAM_TEST_DATA;
+  route();
+} else {
+  app.innerHTML =
+    '<main class="staticError"><h1>Unable to open the demonstration</h1><p>The local test data could not be loaded.</p></main>';
+}
 
 window.addEventListener("hashchange", route);
 window.addEventListener("resize", () => {
